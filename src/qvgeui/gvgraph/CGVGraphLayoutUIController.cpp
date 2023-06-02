@@ -9,6 +9,7 @@
 #include <qvgelib/CFileSerializerPlainDOT.h>
 #include <qvgeio/CFormatPlainDOT.h>
 
+#include <QDebug>
 #include <QMenuBar>
 #include <QMenu>
 #include <QProcess>
@@ -80,13 +81,41 @@ bool CGVGraphLayoutUIController::doRunDOT(const QString &engine, const QString &
 	}
 
 	plainFilePath = tempFile.fileName();
-	tempFile.setAutoRemove(false);
+    tempFile.setAutoRemove(false);
 
-	QString pathToDot = "dot";
-	if (m_pathToGraphviz.size())
-		pathToDot = m_pathToGraphviz + "/dot";
+#ifdef Q_OS_WIN32
+    QString dotProgramName = "dot.exe";
+#else
+    QString dotProgramName = "dot";
+#endif
 
-	QString cmd = QString("\"%1\" -K\"%2\" -Tplain-ext \"%3\" -o\"%4\"").arg(pathToDot, engine).arg(dotFilePath).arg(plainFilePath);
+    QString pathToDot;
+    QString workingDir = m_pathToGraphviz;
+    if (workingDir.size()) {
+        pathToDot = workingDir + QDir::separator() + dotProgramName;
+    }
+
+    if(!QFileInfo(pathToDot).isExecutable()) {
+        pathToDot.clear();
+        QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+        QStringList searchPaths = env.value("PATH").split(";");
+        QStringList::Iterator it = searchPaths.begin();
+        while (it != searchPaths.end()) {
+            QString fullPath = *it + QDir::separator() + dotProgramName;
+            if (QFileInfo(fullPath).isExecutable()) {
+                workingDir =  *it + QDir::separator();
+                pathToDot = fullPath;
+                break;
+            }
+            ++it;
+        }
+    }
+
+    if (pathToDot.length() <= 0) {
+        return false;
+    }
+
+    QString cmd = QString("\"%1\" -K\"%2\" -Tplain-ext \"%3\" -o\"%4\"").arg(pathToDot, engine).arg(dotFilePath).arg(plainFilePath);
 
 	QProgressDialog progressDialog(tr("Running dot takes longer than expected.\n\nAbort execution?"), tr("Abort"), 0, 100);
 	progressDialog.setWindowModality(Qt::ApplicationModal);
@@ -94,7 +123,7 @@ bool CGVGraphLayoutUIController::doRunDOT(const QString &engine, const QString &
 	progressDialog.setMinimumDuration(1000);
 
 	QProcess process;
-	process.setWorkingDirectory(m_pathToGraphviz);
+    process.setWorkingDirectory(workingDir);
 	process.start(cmd);
 	process.waitForStarted(1000);
 	while (process.state() != QProcess::NotRunning)

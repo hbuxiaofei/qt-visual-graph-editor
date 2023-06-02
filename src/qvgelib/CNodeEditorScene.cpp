@@ -304,13 +304,13 @@ void CNodeEditorScene::initialize()
 
 
 	// default node attr
-    CAttribute nodeAttr("color", "Color", QColor(Qt::magenta), ATTR_FIXED);
+    CAttribute nodeAttr("color", "Color", QColor("#FFE6CC"), ATTR_FIXED);
 	setClassAttribute("node", nodeAttr);
 
     CAttribute shapeAttr("shape", "Shape", "disc", ATTR_FIXED);
 	setClassAttribute("node", shapeAttr);
 
-	createClassAttribute("node", "size", "Size", QSizeF(11.0, 11.0), ATTR_MAPPED | ATTR_FIXED);
+    createClassAttribute("node", "size", "Size", QSizeF(150.0, 30.0), ATTR_MAPPED | ATTR_FIXED);
 	//createClassAttribute("node", "width", "Width", 11.0f, ATTR_MAPPED);
 	//createClassAttribute("node", "height", "Height", 11.0f, ATTR_MAPPED);
 

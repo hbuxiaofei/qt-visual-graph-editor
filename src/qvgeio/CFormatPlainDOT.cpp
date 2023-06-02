@@ -13,6 +13,7 @@ It can be used freely, maintaining the information above.
 #include <QDebug>
 #include <QTextStream>
 #include <QFont>
+#include <QTextCodec>
 
 
 // helpers
@@ -322,12 +323,15 @@ bool CFormatPlainDOT::parseNode(const QStringList &refs, GraphInternal &gi) cons
 	rit.next(fillcolor);
 
 	node.attrs["x"] = x * 72.0 * gi.g_scale;
-	node.attrs["y"] = y * 72.0 * gi.g_scale;
+    node.attrs["y"] = -y * 72.0 * gi.g_scale;
 	node.attrs["width"] = width * 72.0 * gi.g_scale;
 	node.attrs["height"] = height * 72.0 * gi.g_scale;
 
+    QTextCodec *utf8 = QTextCodec::codecForName("UTF-8");
+    label = utf8->toUnicode(label.toLocal8Bit());
 	label = label.replace("\\n", "\n");
 	node.attrs["label"] = label;
+
 	node.attrs["shape"] = fromDotNodeShape(shape);
 	fromDotNodeStyle(style, node.attrs);
 	node.attrs["color"] = fillcolor;

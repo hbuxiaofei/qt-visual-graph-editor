@@ -37,7 +37,7 @@ It can be used freely, maintaining the information above.
 #include <qvgelib/CEdge.h>
 #include <qvgelib/CImageExport.h>
 #include <qvgelib/CPDFExport.h>
-#include <qvgelib/CFileSerializerXGR.h>
+#include <qvgelib/CFileSerializerGraphML.h>
 #include <qvgelib/CNodeEditorScene.h>
 #include <qvgelib/CNodeSceneActions.h>
 #include <qvgelib/CEditorSceneDefines.h>
@@ -128,7 +128,7 @@ CNodeEditorUIController::CNodeEditorUIController(CMainWindow *parent) :
 #endif
 	m_gvController->setPathToGraphviz(m_optionsData.graphvizPath);
 
-	m_optionsData.graphvizDefaultEngine = "dot";
+    m_optionsData.graphvizDefaultEngine = "dot";
 
 	m_ioController->setGVGraphController(m_gvController);
 #endif
@@ -672,13 +672,13 @@ void CNodeEditorUIController::doBackup()
 		return;
 	}
 	else {
-		backupFileName = CUtils::cutLastSuffix(backupFileName) + ".bak.xgr";
+        backupFileName = CUtils::cutLastSuffix(backupFileName) + ".bak.graphml";
 	}
 
 	m_parent->statusBar()->showMessage(tr("Running backup... (%1)").arg(backupFileName));
 	qApp->processEvents();
 
-	CFileSerializerXGR writer;
+    CFileSerializerGraphML writer;
 	if (writer.save(backupFileName, *m_editorScene)) {
 		m_parent->statusBar()->showMessage(tr("Backup done (%1)").arg(backupFileName), 2000);
 	}

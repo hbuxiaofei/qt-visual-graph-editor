@@ -45,7 +45,7 @@ qvgeMainWindow::qvgeMainWindow(QWidget *parent):
 	CDocumentFormat dotplain = { "Plain DOT/GraphViz", "*.plain *.txt", { "plain", "txt" }, false, true };
 
     CDocument graph = { tr("Graph Document"), tr("Directed or undirected graph"), "graph", true,
-                        { xgr, gexf, graphml, gml, csv, dot, dotplain } };
+                        { graphml, gml, xgr, gexf, csv, dot, dotplain } };
     addDocument(graph);
 
     //CDocumentFormat txt = { tr("Plain text file"), "*.txt", { "txt" }, true, true };

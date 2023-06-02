@@ -14,6 +14,7 @@ It can be used freely, maintaining the information above.
 
 #include <qvgeio/CFormatDOT.h>
 
+#include <QDebug>
 #include <QFile>
 #include <QTextStream>
 #include <QFileInfo>
@@ -153,8 +154,7 @@ void CFileSerializerDOT::doWriteNode(QTextStream& ts, const CNode& node, const C
 	if (m_writeAttrs)
 	{
 		ts << " [\n";
-
-		ts << "pos = \"" << node.pos().x() / 72.0 << "," << -node.pos().y() / 72.0 << "!\"\n";	//  / 72.0 -> point to inch; -y
+        ts << "pos = \"" << node.pos().x() / 72.0 << "," << -node.pos().y() / 72.0 << "!\"\n";  //  / 72.0 -> point to inch; -y
 
 		const QMap<QByteArray, QVariant>& nodeAttrs = node.getLocalAttributes();
 
@@ -170,6 +170,7 @@ void CFileSerializerDOT::doWriteNode(QTextStream& ts, const CNode& node, const C
 void CFileSerializerDOT::doWriteNodeAttrs(QTextStream& ts, QMap<QByteArray, QVariant> nodeAttrs) const
 {
 	bool styleUsed = false;	// to avoid duplicated setting of node style
+
 
 	// standard attrs
 	if (nodeAttrs.contains("color")) {
@@ -327,10 +328,10 @@ void CFileSerializerDOT::doWriteEdgeAttrs(QTextStream& ts, QMap<QByteArray, QVar
 
 void CFileSerializerDOT::doWriteLabel(QTextStream& ts, QMap<QByteArray, QVariant>& attrs) const
 {
-	if (attrs.contains("label")) {
-		ts << ",xlabel = \"" << toDotString(attrs["label"]) << "\"\n";
-		attrs.remove("label");
-	}
+    if (attrs.contains("label")) {
+        ts << ",label = \"" << toDotString(attrs["label"]) << "\"\n";
+        attrs.remove("label");
+    }
 
 	if (attrs.contains("label.color")) {
 		ts << ",fontcolor = \"" << attrs["label.color"].toString() << "\"\n";
