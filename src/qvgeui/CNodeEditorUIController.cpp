@@ -128,7 +128,7 @@ CNodeEditorUIController::CNodeEditorUIController(CMainWindow *parent) :
 #endif
 	m_gvController->setPathToGraphviz(m_optionsData.graphvizPath);
 
-    m_optionsData.graphvizDefaultEngine = "dot";
+    m_optionsData.graphvizDefaultEngine = "fdp";
 
 	m_ioController->setGVGraphController(m_gvController);
 #endif

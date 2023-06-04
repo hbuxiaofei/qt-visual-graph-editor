@@ -19,9 +19,9 @@ CDOTPreviewPage::CDOTPreviewPage(QWidget *parent) :
 
 	connect(this, SIGNAL(documentChanged(bool)), parent, SLOT(onDocumentChangedState(bool)));
 
+    ui->LayoutButton->addAction("fdp");
 	ui->LayoutButton->addAction("dot");
 	ui->LayoutButton->addAction("neato");
-	ui->LayoutButton->addAction("fdp");
 	ui->LayoutButton->addAction("sfdp");
 	ui->LayoutButton->addAction("circo");
 }

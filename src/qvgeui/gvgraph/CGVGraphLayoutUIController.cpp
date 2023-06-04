@@ -22,15 +22,15 @@
 
 CGVGraphLayoutUIController::CGVGraphLayoutUIController(CMainWindow *parent, CEditorScene *scene) :
     m_parent(parent), m_scene(scene),
-	m_defaultEngine("dot")
+    m_defaultEngine("fdp")
 {
     // add layout menu
     QMenu *layoutMenu = new QMenu(tr("&GraphViz"));
     m_parent->menuBar()->insertMenu(m_parent->getWindowMenuAction(), layoutMenu);
 
-    layoutMenu->addAction(tr("Hierarchical Layout (dot default)"), this, SLOT(doDotLayout()));
+    layoutMenu->addAction(tr("Spring Force Layout (fdp default)"), this, SLOT(doFDPLayout()));
+    layoutMenu->addAction(tr("Hierarchical Layout (dot)"), this, SLOT(doDotLayout()));
     layoutMenu->addAction(tr("Spring Energy Layout (neato)"), this, SLOT(doNeatoLayout()));
-    layoutMenu->addAction(tr("Spring Force Layout (fdp)"), this, SLOT(doFDPLayout()));
     layoutMenu->addAction(tr("Multiscaled Spring Force Layout (sfdp)"), this, SLOT(doSFDPLayout()));
     layoutMenu->addAction(tr("Radial Layout (twopi)"), this, SLOT(doTwopiLayout()));
     layoutMenu->addAction(tr("Circular Layout (circo)"), this, SLOT(doCircularLayout()));

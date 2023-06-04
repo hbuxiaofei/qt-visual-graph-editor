@@ -361,17 +361,17 @@
         </property>
         <item>
          <property name="text">
+          <string>fdp</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
           <string>dot</string>
          </property>
         </item>
         <item>
          <property name="text">
           <string>neato</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>fdp</string>
          </property>
         </item>
         <item>
