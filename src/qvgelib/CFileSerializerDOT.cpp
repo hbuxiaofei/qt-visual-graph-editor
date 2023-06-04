@@ -104,6 +104,7 @@ static QString toDotShape(const QString& shape)
 	if (shape == "disc")		return "ellipse";
 	if (shape == "square")		return "rect";
 	if (shape == "triangle2")	return "invtriangle";
+    if (shape == "roundedrect")	return "Mrecord";
 
 	// else take original
 	return shape;

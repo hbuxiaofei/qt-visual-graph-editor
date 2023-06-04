@@ -3,6 +3,7 @@
 #include "CDirectEdge.h"
 #include "CEditorSceneDefines.h"
 
+#include <QDebug>
 #include <QPen>
 #include <QBrush>
 #include <QEvent>
@@ -894,16 +895,20 @@ void CNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 
 	painter->setPen(QPen(strokeColor, strokeSize, (Qt::PenStyle)strokeStyle));
 
-	// draw shape: disc if no cache
-	if (m_shapeCache.isEmpty())
-	{
-		QRectF r = Shape::boundingRect();
-		painter->drawEllipse(r);
-	}
-	else
-	{
-		painter->drawPolygon(m_shapeCache);
-	}
+    // draw shape: disc if no cache
+    if (m_shapeCache.isEmpty())
+    {
+        QByteArray shapeType = getAttribute("shape").toByteArray();
+        if (shapeType == "roundedrect") {
+                QRectF r = Shape::boundingRect();
+            painter->drawRoundedRect(r, 20, 20);
+        } else {
+            QRectF r = Shape::boundingRect();
+            painter->drawEllipse(r);
+        }
+    } else {
+        painter->drawPolygon(m_shapeCache);
+    }
 }
 
 
@@ -1049,8 +1054,8 @@ void CNode::recalculateShape()
 	else if (shapeType == "triangle2")
 	{
 		m_shapeCache << r.topLeft() << r.topRight() << QPointF(r.bottomRight() + r.bottomLeft()) / 2 << r.topLeft();
-	}
-	else // "disc"
+    }
+    else // "disc", "roundedrect"
 	{
 		// no cache
 	}
