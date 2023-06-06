@@ -173,9 +173,18 @@ static QStringList parseLine(QTextStream &ts)
 		if (line[i] == '"')
 		{
 			i++;
-			QString token;
-			while (line[i] != '"' && line[i] != '\0')
-				token += line[i++];
+            QString token;
+            while (line[i] != '"') {
+                if (line[i] != '\0') {
+                    token += line[i++];
+                } else {
+                    token += '\n';
+                    line = ts.readLine();
+                    line += '\0';
+                    i = 0;
+                }
+            }
+            token.remove("\\\n");
 			tokens << token;
 			i++;
 
