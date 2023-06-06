@@ -148,17 +148,17 @@ private:
 
 static QStringList parseLine(QTextStream &ts)
 {
-	QStringList tokens;
+    QStringList tokens;
 
 	// normal mode
 	while (!ts.atEnd())
 	{
-		QString line = ts.readLine().trimmed();
-		if (line.isEmpty())
-			continue;
+        QString line = ts.readLine().trimmed();
+        if (line.isEmpty())
+            continue;
 
-		// add EOL
-		line += '\0';
+        // add EOL
+        line += '\0';
 
 		int i = 0;
 
@@ -206,7 +206,7 @@ static QStringList parseLine(QTextStream &ts)
 		
 		// read normal tokens
 		QString token;
-		while (line[i] != '\0' && !line[i].isSpace())
+        while (line[i] != '\0' && !line[i].isSpace())
 			token += line[i++];
 
 		tokens << token;
@@ -239,7 +239,7 @@ bool CFormatPlainDOT::load(const QString& fileName, Graph& g, QString* lastError
 	gi.g = &g;
 
 	QFile f(fileName);
-	if (!f.open(QFile::ReadOnly))
+    if (!f.open(QFile::ReadOnly | QIODevice::Text))
 	{
 		if (lastError)
 			*lastError = QObject::tr("Cannot open file");
@@ -248,6 +248,8 @@ bool CFormatPlainDOT::load(const QString& fileName, Graph& g, QString* lastError
 	}
 
 	QTextStream ts(&f);
+    ts.setGenerateByteOrderMark(true);
+    ts.setCodec("UTF-8");
 
 	while (!ts.atEnd())
 	{
@@ -328,9 +330,8 @@ bool CFormatPlainDOT::parseNode(const QStringList &refs, GraphInternal &gi) cons
 	node.attrs["width"] = width * 72.0 * gi.g_scale;
 	node.attrs["height"] = height * 72.0 * gi.g_scale;
 
-    QTextCodec *utf8 = QTextCodec::codecForName("UTF-8");
-    label = utf8->toUnicode(label.toLocal8Bit());
 	label = label.replace("\\n", "\n");
+    label = label.replace("\\>", ">");
 	node.attrs["label"] = label;
 
 	node.attrs["shape"] = fromDotNodeShape(shape);

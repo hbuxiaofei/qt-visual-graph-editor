@@ -114,6 +114,7 @@ static QString toDotShape(const QString& shape)
 static QString toDotString(const QVariant& v)
 {
 	QString val = v.toString();
+    val = val.replace(">", "\\>");
 	return val.replace('"', "'");
 }
 
