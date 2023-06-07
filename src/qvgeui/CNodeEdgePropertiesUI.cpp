@@ -45,6 +45,7 @@ CNodeEdgePropertiesUI::CNodeEdgePropertiesUI(QWidget *parent) :
     ui->NodeShape->addAction(QIcon(":/Icons/Node-Triangle-Down"), tr("Triangle Down"), "triangle2");
 	ui->NodeShape->addAction(QIcon(":/Icons/Node-Hexagon"), tr("Hexagon"), "hexagon");
     ui->NodeShape->addAction(QIcon(":/Icons/Node-RoundedRect"), tr("RoundedRect"), "roundedrect");
+    ui->NodeShape->addAction(QIcon(":/Icons/Node-Note"), tr("Note"), "note");
 
     ui->NodeAttrBox->setChecked(false);
 

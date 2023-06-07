@@ -48,5 +48,6 @@
         <file alias="GraphML">Icons/Format-GraphML.png</file>
         <file alias="PDF">Icons/Format-PDF.png</file>
         <file alias="Node-RoundedRect">Icons/Node-RoundedRect.png</file>
+        <file alias="Node-Note">Icons/Node-Note.png</file>
     </qresource>
 </RCC>

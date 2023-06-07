@@ -105,6 +105,7 @@ static QString toDotShape(const QString& shape)
 	if (shape == "square")		return "rect";
 	if (shape == "triangle2")	return "invtriangle";
     if (shape == "roundedrect")	return "Mrecord";
+    if (shape == "note")	    return "note";
 
 	// else take original
 	return shape;
@@ -141,6 +142,7 @@ void CFileSerializerDOT::doWriteNodeDefaults(QTextStream& ts, const CEditorScene
 	{
 		ts << "node [\n";
 		ts << "class = \"node\"\n";
+        ts << ",fixedsize = true\n";
 
 		doWriteNodeAttrs(ts, nodeAttrs);
 

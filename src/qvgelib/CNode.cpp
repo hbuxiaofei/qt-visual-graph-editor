@@ -1055,6 +1055,20 @@ void CNode::recalculateShape()
 	{
 		m_shapeCache << r.topLeft() << r.topRight() << QPointF(r.bottomRight() + r.bottomLeft()) / 2 << r.topLeft();
     }
+    else if (shapeType == "note")
+    {
+        float rx = r.center().x();
+        float ry = r.center().y();
+        float ts = fminf(r.width(), r.height()) / 8;
+
+        m_shapeCache << r.topLeft() << r.bottomLeft() << r.bottomRight()
+                     << QPointF(rx + r.width() / 2, ry - r.height() / 2 + ts)
+                     << QPointF(r.left() + r.width() - ts, ry - r.height() / 2)
+                     << QPointF(r.left() + r.width() - ts, ry - r.height() / 2 + ts)
+                     << QPointF(rx + r.width() / 2, ry - r.height() / 2 + ts)
+                     << QPointF(r.left() + r.width() - ts, ry - r.height() / 2)
+                     << r.topLeft();
+    }
     else // "disc", "roundedrect"
 	{
 		// no cache
