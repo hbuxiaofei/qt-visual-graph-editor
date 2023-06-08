@@ -847,6 +847,57 @@ QVariant CNode::itemChange(QGraphicsItem::GraphicsItemChange change, const QVari
 	return value;
 }
 
+void CNode::drawShape(QPainter *painter)
+{
+    // draw shape: no cache
+    if (m_shapeCache.isEmpty())
+    {
+        QByteArray shapeType = getAttribute("shape").toByteArray();
+        if (shapeType == "roundedrect") {
+            QRectF r = Shape::boundingRect();
+            painter->drawRoundedRect(r, 20, 20);
+        } else if (shapeType == "point") {
+            QRectF r = Shape::boundingRect();
+            // painter->drawPoint(QPointF(r.center().x(), r.center().y()));
+            this->drawCylinder(painter, r);
+        } else {
+            QRectF r = Shape::boundingRect();
+            painter->drawEllipse(r);
+        }
+    } else {
+        painter->drawPolygon(m_shapeCache);
+    }
+}
+
+void CNode::drawCylinder(QPainter *painter, QRectF r)
+{
+    QPainterPath path;
+
+//    path.moveTo(r.center().x() - r.width() / 2.0, r.center().y() - r.height() / 8.0 * 3.0);
+//    path.lineTo(QPointF(r.center().x() - r.width() / 2.0, r.center().y() + r.height() / 2.0));
+//    path.lineTo(QPointF(r.center().x() + r.width() / 2.0, r.center().y() + r.height() / 2.0));
+//    path.lineTo(QPointF(r.center().x() + r.width() / 2.0, r.center().y() - r.height() / 8.0 * 3.0));
+
+//    QRectF recTop(r.topLeft(),
+//               QPointF(r.center().x() + r.width() / 2.0, r.center().y() - r.height() / 8.0 * 2.0));
+//    painter->drawArc(recTop, 0 * 16, 360 * 16);
+
+    QRectF recBottom(QPointF(r.center().x() - r.width()/ 2.0, r.center().y() + r.height() / 8.0 * 2.0),
+                r.bottomRight());
+    painter->drawArc(recBottom, 0 * 16, -180 * 16);
+
+    path.addEllipse(QPointF(r.center().x(), r.center().y() - r.height() / 8.0 * 3.0),
+                    r.width() / 2.0,
+                    r.height() / 8.0);
+
+    path.moveTo(r.center().x() - r.width() / 2.0, r.center().y() - r.height() / 8.0 * 3.0);
+    path.lineTo(QPointF(r.center().x() - r.width() / 2.0, r.center().y() + r.height() / 8.0 * 3.0));
+
+    path.moveTo(r.center().x() + r.width() / 2.0, r.center().y() - r.height() / 8.0 * 3.0);
+    path.lineTo(QPointF(r.center().x() + r.width() / 2.0, r.center().y() + r.height() / 8.0 * 3.0));
+
+    painter->drawPath(path);
+}
 
 void CNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget*)
 {
@@ -875,16 +926,7 @@ void CNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 		painter->setPen(QPen(Qt::darkCyan, strokeSize+5, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin));
 		painter->setOpacity(0.3);
 
-		// draw shape: disc if no cache
-		if (m_shapeCache.isEmpty())
-		{
-			QRectF r = Shape::boundingRect();
-			painter->drawEllipse(r);
-		}
-		else
-		{
-			painter->drawPolygon(m_shapeCache);
-		}
+        this->drawShape(painter);
 	}
 	
 	// hover opacity
@@ -895,20 +937,7 @@ void CNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 
 	painter->setPen(QPen(strokeColor, strokeSize, (Qt::PenStyle)strokeStyle));
 
-    // draw shape: disc if no cache
-    if (m_shapeCache.isEmpty())
-    {
-        QByteArray shapeType = getAttribute("shape").toByteArray();
-        if (shapeType == "roundedrect") {
-                QRectF r = Shape::boundingRect();
-            painter->drawRoundedRect(r, 20, 20);
-        } else {
-            QRectF r = Shape::boundingRect();
-            painter->drawEllipse(r);
-        }
-    } else {
-        painter->drawPolygon(m_shapeCache);
-    }
+    this->drawShape(painter);
 }
 
 
@@ -1069,7 +1098,7 @@ void CNode::recalculateShape()
                      << QPointF(r.left() + r.width() - ts, ry - r.height() / 2)
                      << r.topLeft();
     }
-    else // "disc", "roundedrect"
+    else // "disc", "roundedrect", "point"
 	{
 		// no cache
 	}

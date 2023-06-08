@@ -74,6 +74,7 @@ static QString fromDotShape(const std::string& shape)
 	if (shape == "invtriangle")	return "triangle2";
     if (shape == "Mrecord")	return "roundedrect";
     if (shape == "note") return "note";
+    if (shape == "point") return "point";
 
 	// else take original
 	return QString::fromStdString(shape);
