@@ -48,6 +48,7 @@ CNodeEdgePropertiesUI::CNodeEdgePropertiesUI(QWidget *parent) :
     ui->NodeShape->addAction(QIcon(":/Icons/Node-Note"), tr("Note"), "note");
     ui->NodeShape->addAction(QIcon(":/Icons/Node-Point"), tr("Point"), "point");
     ui->NodeShape->addAction(QIcon(":/Icons/Node-Cylinder"), tr("Cylinder"), "cylinder");
+    ui->NodeShape->addAction(QIcon(":/Icons/Node-Box3d"), tr("Box3d"), "box3d");
 
     ui->NodeAttrBox->setChecked(false);
 

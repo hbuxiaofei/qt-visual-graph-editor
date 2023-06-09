@@ -143,6 +143,7 @@ private:
 	void resize(const QSizeF& size) { resize(size.width(), size.height()); }
 
     void drawCylinder(QPainter *painter, QRectF r);
+    void drawBox3d(QPainter *painter, QRectF r);
     void drawShape(QPainter *painter);
 
 protected:

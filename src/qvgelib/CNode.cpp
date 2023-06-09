@@ -862,6 +862,9 @@ void CNode::drawShape(QPainter *painter)
         } else if ((shapeType == "cylinder")) {
             QRectF r = Shape::boundingRect();
             this->drawCylinder(painter, r);
+        } else if ((shapeType == "box3d")) {
+            QRectF r = Shape::boundingRect();
+            this->drawBox3d(painter, r);
         } else {
             QRectF r = Shape::boundingRect();
             painter->drawEllipse(r);
@@ -891,6 +894,38 @@ void CNode::drawCylinder(QPainter *painter, QRectF r)
 
     painter->drawPath(path);
     painter->drawArc(recTop, 0 * 16, -180 * 16);
+}
+
+void CNode::drawBox3d(QPainter *painter, QRectF r)
+{
+    qreal x = r.center().x();
+    qreal y = r.center().y();
+    QPointF p1(x - r.width() / 8.0 * 3.0, y - r.height() / 2.0);
+    QPointF p2(x - r.width() / 2.0, y - r.height() / 8.0 * 3.0);
+    QPointF p3(x + r.width() / 2.0, y + r.height() / 8.0 * 3.0);
+    QPointF p4(x + r.width() / 8.0 * 3.0, y + r.height() / 2.0);
+    QPointF p0(p4.x(), p2.y());
+
+    QPainterPath path;
+
+    path.moveTo(p1);
+    path.lineTo(p2);
+    path.lineTo(r.bottomLeft());
+    path.lineTo(p4);
+    path.lineTo(p3);
+    path.lineTo(r.topRight());
+    path.lineTo(p1);
+
+    path.moveTo(p0);
+    path.lineTo(p2);
+
+    path.moveTo(p0);
+    path.lineTo(p4);
+
+    path.moveTo(p0);
+    path.lineTo(r.topRight());
+
+    painter->drawPath(path);
 }
 
 void CNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget*)
@@ -1092,7 +1127,7 @@ void CNode::recalculateShape()
                      << QPointF(r.left() + r.width() - ts, ry - r.height() / 2)
                      << r.topLeft();
     }
-    else // "disc", "roundedrect", "point", "cylinder"
+    else // "disc", "roundedrect", "point", "cylinder", "box3d"
 	{
 		// no cache
 	}
