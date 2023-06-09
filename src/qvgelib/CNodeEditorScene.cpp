@@ -355,15 +355,17 @@ void CNodeEditorScene::initialize()
 	if (nodeShapes->ids.isEmpty()) {
         nodeShapes->names << tr("Disc") << tr("Square") << tr("Triangle (up)") \
                           << tr("Triangle (down)") << tr("Diamond") << tr("Hexagon") \
-                          << tr("RoundedRect") << tr("Note") << tr("Point");
+                          << tr("RoundedRect") << tr("Note") << tr("Point") \
+                          << tr("Cylinder");
         nodeShapes->ids << "disc" << "square" << "triangle" \
                         << "triangle2" << "diamond" << "hexagon" \
-                        << "roundedrect" << "note" << "point";
+                        << "roundedrect" << "note" << "point" \
+                        << "cylinder";
         nodeShapes->icons << QIcon(":/Icons/Node-Disc") << QIcon(":/Icons/Node-Square") \
                           << QIcon(":/Icons/Node-Triangle") << QIcon(":/Icons/Node-Triangle-Down") \
                           << QIcon(":/Icons/Node-Diamond") << QIcon(":/Icons/Node-Hexagon") \
                           << QIcon(":/Icons/Node-RoundedRect") << QIcon(":/Icons/Node-Note") \
-                          << QIcon(":/Icons/Node-Point");
+                          << QIcon(":/Icons/Node-Point") << QIcon(":/Icons/Node-Cylinder");
 	}
 	setClassAttributeConstrains("node", "shape", nodeShapes);
 }

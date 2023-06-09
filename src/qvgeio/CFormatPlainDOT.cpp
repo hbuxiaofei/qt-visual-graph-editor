@@ -27,6 +27,7 @@ static QString fromDotNodeShape(const QString& shape)
     if (shape == "Mrecord")	return "roundedrect";
     if (shape == "note") return "note";
     if (shape == "point") return "point";
+    if (shape == "cylinder") return "cylinder";
 
 	// else take original
 	return shape;

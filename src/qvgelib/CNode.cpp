@@ -858,7 +858,9 @@ void CNode::drawShape(QPainter *painter)
             painter->drawRoundedRect(r, 20, 20);
         } else if (shapeType == "point") {
             QRectF r = Shape::boundingRect();
-            // painter->drawPoint(QPointF(r.center().x(), r.center().y()));
+            painter->drawPoint(QPointF(r.center().x(), r.center().y()));
+        } else if ((shapeType == "cylinder")) {
+            QRectF r = Shape::boundingRect();
             this->drawCylinder(painter, r);
         } else {
             QRectF r = Shape::boundingRect();
@@ -871,32 +873,24 @@ void CNode::drawShape(QPainter *painter)
 
 void CNode::drawCylinder(QPainter *painter, QRectF r)
 {
+    QRectF recTop(r.topLeft(),
+                  QPointF(r.center().x() + r.width() / 2.0, r.center().y() - r.height() / 8.0 * 2.0));
+    QRectF recBottom(QPointF(r.center().x() - r.width() / 2.0, r.center().y() + r.height() / 8.0 * 2.0),
+                     r.bottomRight());
+
     QPainterPath path;
+    qreal xStart = r.center().x() + r.width() / 2.0;
+    qreal yStart = r.center().y() - r.height() / 8.0 * 3.0;
 
-//    path.moveTo(r.center().x() - r.width() / 2.0, r.center().y() - r.height() / 8.0 * 3.0);
-//    path.lineTo(QPointF(r.center().x() - r.width() / 2.0, r.center().y() + r.height() / 2.0));
-//    path.lineTo(QPointF(r.center().x() + r.width() / 2.0, r.center().y() + r.height() / 2.0));
-//    path.lineTo(QPointF(r.center().x() + r.width() / 2.0, r.center().y() - r.height() / 8.0 * 3.0));
-
-//    QRectF recTop(r.topLeft(),
-//               QPointF(r.center().x() + r.width() / 2.0, r.center().y() - r.height() / 8.0 * 2.0));
-//    painter->drawArc(recTop, 0 * 16, 360 * 16);
-
-    QRectF recBottom(QPointF(r.center().x() - r.width()/ 2.0, r.center().y() + r.height() / 8.0 * 2.0),
-                r.bottomRight());
-    painter->drawArc(recBottom, 0 * 16, -180 * 16);
-
-    path.addEllipse(QPointF(r.center().x(), r.center().y() - r.height() / 8.0 * 3.0),
-                    r.width() / 2.0,
-                    r.height() / 8.0);
-
-    path.moveTo(r.center().x() - r.width() / 2.0, r.center().y() - r.height() / 8.0 * 3.0);
-    path.lineTo(QPointF(r.center().x() - r.width() / 2.0, r.center().y() + r.height() / 8.0 * 3.0));
-
-    path.moveTo(r.center().x() + r.width() / 2.0, r.center().y() - r.height() / 8.0 * 3.0);
+    path.moveTo(xStart, yStart);
     path.lineTo(QPointF(r.center().x() + r.width() / 2.0, r.center().y() + r.height() / 8.0 * 3.0));
+    path.arcTo(recBottom, 0, -180);
+    path.lineTo(r.center().x() - r.width() / 2.0, r.center().y() - r.height() / 8.0 * 3.0);
+    path.arcTo(recTop, 180, -180);
+    path.lineTo(xStart, yStart);
 
     painter->drawPath(path);
+    painter->drawArc(recTop, 0 * 16, -180 * 16);
 }
 
 void CNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget*)
@@ -1098,7 +1092,7 @@ void CNode::recalculateShape()
                      << QPointF(r.left() + r.width() - ts, ry - r.height() / 2)
                      << r.topLeft();
     }
-    else // "disc", "roundedrect", "point"
+    else // "disc", "roundedrect", "point", "cylinder"
 	{
 		// no cache
 	}

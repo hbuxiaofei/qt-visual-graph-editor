@@ -107,6 +107,7 @@ static QString toDotShape(const QString& shape)
     if (shape == "roundedrect")	return "Mrecord";
     if (shape == "note")	    return "note";
     if (shape == "point")	    return "point";
+    if (shape == "cylinder")	return "cylinder";
 
 	// else take original
 	return shape;

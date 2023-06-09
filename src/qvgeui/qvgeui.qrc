@@ -50,5 +50,6 @@
         <file alias="Node-RoundedRect">Icons/Node-RoundedRect.png</file>
         <file alias="Node-Note">Icons/Node-Note.png</file>
         <file alias="Node-Point">Icons/Node-Point.png</file>
+        <file alias="Node-Cylinder">Icons/Node-Cylinder.png</file>
     </qresource>
 </RCC>
