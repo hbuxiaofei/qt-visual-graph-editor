@@ -24,13 +24,6 @@ else{
 CONFIG += no_lflags_merge
 LIBS += -lqvgeui -lqvgeioui -lcommonui -lqvgelib -lqvgeio -lqtpropertybrowser -lqsint-widgets
 
-
-USE_OGDF{
-	LIBS += -L$$OGDF_LIB_PATH -l$$OGDF_LIB_NAME
-	INCLUDEPATH += $$OGDF_INCLUDE_PATH
-}
-
-
 USE_BOOST{
 	LIBS += -L$$BOOST_LIB_PATH -l$$BOOST_LIB_NAME
 	INCLUDEPATH += $$BOOST_INCLUDE_PATH

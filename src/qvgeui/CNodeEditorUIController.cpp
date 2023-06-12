@@ -17,11 +17,6 @@ It can be used freely, maintaining the information above.
 #include <CNodePortEditorDialog.h>
 #include <CSearchDialog.h>
 
-#ifdef USE_OGDF
-#include <ogdf/COGDFLayoutUIController.h>
-#include <ogdf/COGDFLayout.h>
-#endif
-
 #ifdef USE_GVGRAPH
 #include <gvgraph/CGVGraphLayoutUIController.h>
 #endif
@@ -107,13 +102,6 @@ CNodeEditorUIController::CNodeEditorUIController(CMainWindow *parent) :
 
 	// IO
 	m_ioController = new CImportExportUIController(parent);
-
-
-    // OGDF
-#ifdef USE_OGDF
-    m_ogdfController = new COGDFLayoutUIController(parent, m_editorScene);
-    connect(m_ogdfController, SIGNAL(layoutFinished()), this, SLOT(onLayoutFinished()));
-#endif
 
     // GraphViz
 #ifdef USE_GVGRAPH

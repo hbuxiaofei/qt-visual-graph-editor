@@ -159,10 +159,6 @@ private:
 
 	QTimer m_backupTimer;
 
-#ifdef USE_OGDF
-	class COGDFLayoutUIController *m_ogdfController = nullptr;
-#endif
-
 #ifdef USE_GVGRAPH
 	class CGVGraphLayoutUIController *m_gvController = nullptr;
 #endif
