@@ -180,8 +180,8 @@ QString qdotMainWindow::getAboutText() const
 	return Super::getAboutText()
 		+ QString(
 			"<p>This is a free software."
-			"<br>It comes without warranty of any kind. Use it on your own risk."
-			"<p>&copy; 2016-2021 Ars L. Masiuk"
+            "<br>It comes without warranty of any kind. Use it on your own risk."
+            "<p>&copy; 2023 Ray Lee"
 			"<hr>"
 			"<p><i>Credits:</i>"
 			"<br>&nbsp; - Qt framework &copy; <i>The Qt Company Ltd</i>"
@@ -190,6 +190,7 @@ QString qdotMainWindow::getAboutText() const
             "<br>&nbsp; - QProcessInfo &copy; <i>Baldur Karlsson</i>"
 			"<br>&nbsp; - menu & toolbar graphics &copy; <i>Inkscape project</i>"
             "<br>&nbsp; - GraphViz &copy; <i>GraphViz development team</i>"
+            "<br>&nbsp; - qvge &copy; <i>Ars L. Masiuk</i>"
 		);
 }
 
