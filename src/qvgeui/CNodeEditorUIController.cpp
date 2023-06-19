@@ -660,7 +660,7 @@ void CNodeEditorUIController::doBackup()
 		return;
 	}
 	else {
-        backupFileName = CUtils::cutLastSuffix(backupFileName) + ".bak.graphml";
+        backupFileName = "." + CUtils::cutLastSuffix(backupFileName) + ".graphml.bak";
 	}
 
 	m_parent->statusBar()->showMessage(tr("Running backup... (%1)").arg(backupFileName));
