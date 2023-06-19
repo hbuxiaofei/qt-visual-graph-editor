@@ -307,7 +307,7 @@ void CNodeEditorScene::initialize()
     CAttribute nodeAttr("color", "Color", QColor("#FFE6CC"), ATTR_FIXED);
 	setClassAttribute("node", nodeAttr);
 
-    CAttribute shapeAttr("shape", "Shape", "disc", ATTR_FIXED);
+    CAttribute shapeAttr("shape", "Shape", "roundedrect", ATTR_FIXED);
 	setClassAttribute("node", shapeAttr);
 
     createClassAttribute("node", "size", "Size", QSizeF(150.0, 30.0), ATTR_MAPPED | ATTR_FIXED);
