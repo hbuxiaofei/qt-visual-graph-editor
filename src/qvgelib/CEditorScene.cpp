@@ -58,7 +58,7 @@ CEditorScene::CEditorScene(QObject *parent):
     m_gridSize = 25;
     m_gridEnabled = true;
     m_gridSnap = true;
-    m_gridPen = QPen(Qt::gray, 0, Qt::DotLine);
+    m_gridPen = QPen(QColor("#cdcdcd"), 0, Qt::DotLine);
 
 	setBackgroundBrush(Qt::white);
 

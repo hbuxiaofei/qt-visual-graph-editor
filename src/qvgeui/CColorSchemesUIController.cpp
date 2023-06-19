@@ -6,6 +6,21 @@
 
 CColorSchemesUIController::CColorSchemesUIController(QObject *parent) : QObject(parent)
 {
+    {
+        Scheme scheme{ tr("Default") };
+        scheme.bgColor = Qt::white;
+        scheme.gridColor = QColor("#cdcdcd");
+
+        scheme.nodeColor = QColor("#ffe6cc");
+        scheme.nodeStrokeColor = Qt::black;
+        scheme.nodeLabelColor = Qt::black;
+
+        scheme.edgeColor = Qt::lightGray;
+        scheme.edgeLabelColor = Qt::black;
+
+        addScheme(scheme);
+    }
+
 	{	
 		Scheme scheme{ tr("Grayscale") };
 		scheme.bgColor = Qt::white;
@@ -122,7 +137,7 @@ void CColorSchemesUIController::applyScheme(const Scheme& scheme)
 	if (m_scene)
 	{
 		m_scene->setBackgroundBrush(scheme.bgColor);
-		m_scene->setGridPen(scheme.gridColor);
+        m_scene->setGridPen(QPen(scheme.gridColor, 0, Qt::DotLine));
 		m_scene->setClassAttribute(class_node, "color", scheme.nodeColor);
 		m_scene->setClassAttribute(class_node, "stroke.color", scheme.nodeStrokeColor);
 		m_scene->setClassAttribute(class_node, "label.color", scheme.nodeLabelColor);
