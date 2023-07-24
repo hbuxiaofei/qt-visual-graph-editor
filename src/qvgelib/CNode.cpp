@@ -995,7 +995,8 @@ void CNode::updateCachedItems()
 	recalculateShape();
 
 	// update caches & connections 
-	if (m_shapeCache != shapeCache || m_sizeCache != sizeCache)
+    // if (m_shapeCache != shapeCache || m_sizeCache != sizeCache)
+    if (m_ports.count() > 0)
 	{
 		// update ports & edges
 		updatePortsLayout();
