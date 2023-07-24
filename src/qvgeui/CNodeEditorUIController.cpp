@@ -1033,6 +1033,14 @@ void CNodeEditorUIController::editNodePort(CNodePort &port)
 		m_editorScene->revertUndoState();
 }
 
+void CNodeEditorUIController::removeNodePort()
+{
+    CNodePort *port = dynamic_cast<CNodePort*>(m_editorScene->getContextMenuTrigger());
+    if (port) {
+        auto node = port->getNode();
+        node->removePort(port->getId());
+    }
+}
 
 void CNodeEditorUIController::find()
 {

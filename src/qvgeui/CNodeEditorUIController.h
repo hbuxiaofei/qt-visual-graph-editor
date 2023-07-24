@@ -95,7 +95,8 @@ private Q_SLOTS:
 
 	void addNodePort();
 	void editNodePort();
-	
+    void removeNodePort();
+
 	void factorNodes();
 
 	void find();
