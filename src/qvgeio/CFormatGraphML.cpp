@@ -129,7 +129,7 @@ void CFormatGraphML::writeEdges(QXmlStreamWriter &xsw, const Graph& graph) const
 		if (edge.startPortId.size())
 			xsw.writeAttribute("sourceport", edge.startPortId);
 		if (edge.endPortId.size())
-			xsw.writeAttribute("endport", edge.endPortId);
+            xsw.writeAttribute("targetport", edge.endPortId);
 
 		// attributes
 		for (auto it = edge.attrs.constBegin(); it != edge.attrs.constEnd(); it++)
