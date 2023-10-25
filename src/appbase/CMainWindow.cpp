@@ -965,6 +965,7 @@ QSettings& CMainWindow::getApplicationSettings() const
 	//return settings;
 
 	static QSettings* settings = new QSettings(QCoreApplication::organizationName(), QCoreApplication::applicationName());
+    // settings->clear();
 	return *settings;
 }
 

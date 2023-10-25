@@ -36,11 +36,11 @@ public:
 	}
 
 	virtual QString filters() const {
-		return "DOT/GraphViz graphs (*.gv *.dot)";
+        return "DOT/GraphViz graphs (*.dot *.gv)";
 	}
 
 	virtual QString defaultFileExtension() const {
-        return "gv";
+        return "dot";
 	}
 
 	virtual bool loadSupported() const {

@@ -13,6 +13,7 @@ It can be used freely, maintaining the information above.
 #include <QDebug>
 #include <QTextStream>
 #include <QFont>
+#include <QTextCodec>
 
 
 // helpers
@@ -23,6 +24,11 @@ static QString fromDotNodeShape(const QString& shape)
 	if (shape == "ellipse")		return "disc";
 	if (shape == "rect" || shape == "box" ) return "square";
 	if (shape == "invtriangle")	return "triangle2";
+    if (shape == "Mrecord")	return "roundedrect";
+    if (shape == "note") return "note";
+    if (shape == "point") return "point";
+    if (shape == "cylinder") return "cylinder";
+    if (shape == "box3d") return "box3d";
 
 	// else take original
 	return shape;
@@ -146,17 +152,17 @@ private:
 
 static QStringList parseLine(QTextStream &ts)
 {
-	QStringList tokens;
+    QStringList tokens;
 
 	// normal mode
 	while (!ts.atEnd())
 	{
-		QString line = ts.readLine().trimmed();
-		if (line.isEmpty())
-			continue;
+        QString line = ts.readLine().trimmed();
+        if (line.isEmpty())
+            continue;
 
-		// add EOL
-		line += '\0';
+        // add EOL
+        line += '\0';
 
 		int i = 0;
 
@@ -171,9 +177,18 @@ static QStringList parseLine(QTextStream &ts)
 		if (line[i] == '"')
 		{
 			i++;
-			QString token;
-			while (line[i] != '"' && line[i] != '\0')
-				token += line[i++];
+            QString token;
+            while (line[i] != '"') {
+                if (line[i] != '\0') {
+                    token += line[i++];
+                } else {
+                    token += '\n';
+                    line = ts.readLine();
+                    line += '\0';
+                    i = 0;
+                }
+            }
+            token.remove("\\\n");
 			tokens << token;
 			i++;
 
@@ -204,7 +219,7 @@ static QStringList parseLine(QTextStream &ts)
 		
 		// read normal tokens
 		QString token;
-		while (line[i] != '\0' && !line[i].isSpace())
+        while (line[i] != '\0' && !line[i].isSpace())
 			token += line[i++];
 
 		tokens << token;
@@ -237,7 +252,7 @@ bool CFormatPlainDOT::load(const QString& fileName, Graph& g, QString* lastError
 	gi.g = &g;
 
 	QFile f(fileName);
-	if (!f.open(QFile::ReadOnly))
+    if (!f.open(QFile::ReadOnly | QIODevice::Text))
 	{
 		if (lastError)
 			*lastError = QObject::tr("Cannot open file");
@@ -246,6 +261,8 @@ bool CFormatPlainDOT::load(const QString& fileName, Graph& g, QString* lastError
 	}
 
 	QTextStream ts(&f);
+    ts.setGenerateByteOrderMark(true);
+    ts.setCodec("UTF-8");
 
 	while (!ts.atEnd())
 	{
@@ -322,12 +339,14 @@ bool CFormatPlainDOT::parseNode(const QStringList &refs, GraphInternal &gi) cons
 	rit.next(fillcolor);
 
 	node.attrs["x"] = x * 72.0 * gi.g_scale;
-	node.attrs["y"] = y * 72.0 * gi.g_scale;
+    node.attrs["y"] = -y * 72.0 * gi.g_scale;
 	node.attrs["width"] = width * 72.0 * gi.g_scale;
 	node.attrs["height"] = height * 72.0 * gi.g_scale;
 
 	label = label.replace("\\n", "\n");
+    label = label.replace("\\>", ">");
 	node.attrs["label"] = label;
+
 	node.attrs["shape"] = fromDotNodeShape(shape);
 	fromDotNodeStyle(style, node.attrs);
 	node.attrs["color"] = fillcolor;

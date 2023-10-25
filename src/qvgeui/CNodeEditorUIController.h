@@ -95,7 +95,8 @@ private Q_SLOTS:
 
 	void addNodePort();
 	void editNodePort();
-	
+    void removeNodePort();
+
 	void factorNodes();
 
 	void find();
@@ -158,10 +159,6 @@ private:
 	OptionsData m_optionsData;
 
 	QTimer m_backupTimer;
-
-#ifdef USE_OGDF
-	class COGDFLayoutUIController *m_ogdfController = nullptr;
-#endif
 
 #ifdef USE_GVGRAPH
 	class CGVGraphLayoutUIController *m_gvController = nullptr;

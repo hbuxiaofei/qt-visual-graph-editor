@@ -7,14 +7,14 @@
 
 
 TEMPLATE = app
-TARGET = qdot
+TARGET = Q-Dot
 
 win32{
-	VERSION = 0.0.1.0
-	RC_ICONS = $$PWD/win32/icon.ico
-	QMAKE_TARGET_COPYRIGHT = (C) 2016-2020 Ars L. Masiuk
+        VERSION = 0.0.1.1
+        RC_ICONS = $$PWD/win32/icon.ico
+        QMAKE_TARGET_COPYRIGHT = (C) 2023 Ray Lee
 	QMAKE_TARGET_DESCRIPTION = Qt Visual GraphViz Assistent
-	QMAKE_TARGET_PRODUCT = qdot
+        QMAKE_TARGET_PRODUCT = Q-Dot
 }
 
 

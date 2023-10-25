@@ -17,11 +17,6 @@ It can be used freely, maintaining the information above.
 #include <CNodePortEditorDialog.h>
 #include <CSearchDialog.h>
 
-#ifdef USE_OGDF
-#include <ogdf/COGDFLayoutUIController.h>
-#include <ogdf/COGDFLayout.h>
-#endif
-
 #ifdef USE_GVGRAPH
 #include <gvgraph/CGVGraphLayoutUIController.h>
 #endif
@@ -37,7 +32,7 @@ It can be used freely, maintaining the information above.
 #include <qvgelib/CEdge.h>
 #include <qvgelib/CImageExport.h>
 #include <qvgelib/CPDFExport.h>
-#include <qvgelib/CFileSerializerXGR.h>
+#include <qvgelib/CFileSerializerGraphML.h>
 #include <qvgelib/CNodeEditorScene.h>
 #include <qvgelib/CNodeSceneActions.h>
 #include <qvgelib/CEditorSceneDefines.h>
@@ -108,13 +103,6 @@ CNodeEditorUIController::CNodeEditorUIController(CMainWindow *parent) :
 	// IO
 	m_ioController = new CImportExportUIController(parent);
 
-
-    // OGDF
-#ifdef USE_OGDF
-    m_ogdfController = new COGDFLayoutUIController(parent, m_editorScene);
-    connect(m_ogdfController, SIGNAL(layoutFinished()), this, SLOT(onLayoutFinished()));
-#endif
-
     // GraphViz
 #ifdef USE_GVGRAPH
 	m_gvController = new CGVGraphLayoutUIController(parent, m_editorScene);
@@ -128,7 +116,7 @@ CNodeEditorUIController::CNodeEditorUIController(CMainWindow *parent) :
 #endif
 	m_gvController->setPathToGraphviz(m_optionsData.graphvizPath);
 
-	m_optionsData.graphvizDefaultEngine = "dot";
+    m_optionsData.graphvizDefaultEngine = "fdp";
 
 	m_ioController->setGVGraphController(m_gvController);
 #endif
@@ -672,13 +660,13 @@ void CNodeEditorUIController::doBackup()
 		return;
 	}
 	else {
-		backupFileName = CUtils::cutLastSuffix(backupFileName) + ".bak.xgr";
+        backupFileName = "." + CUtils::cutLastSuffix(backupFileName) + ".graphml.bak";
 	}
 
 	m_parent->statusBar()->showMessage(tr("Running backup... (%1)").arg(backupFileName));
 	qApp->processEvents();
 
-	CFileSerializerXGR writer;
+    CFileSerializerGraphML writer;
 	if (writer.save(backupFileName, *m_editorScene)) {
 		m_parent->statusBar()->showMessage(tr("Backup done (%1)").arg(backupFileName), 2000);
 	}
@@ -1045,6 +1033,14 @@ void CNodeEditorUIController::editNodePort(CNodePort &port)
 		m_editorScene->revertUndoState();
 }
 
+void CNodeEditorUIController::removeNodePort()
+{
+    CNodePort *port = dynamic_cast<CNodePort*>(m_editorScene->getContextMenuTrigger());
+    if (port) {
+        auto node = port->getNode();
+        node->removePort(port->getId());
+    }
+}
 
 void CNodeEditorUIController::find()
 {

@@ -45,7 +45,7 @@ qvgeMainWindow::qvgeMainWindow(QWidget *parent):
 	CDocumentFormat dotplain = { "Plain DOT/GraphViz", "*.plain *.txt", { "plain", "txt" }, false, true };
 
     CDocument graph = { tr("Graph Document"), tr("Directed or undirected graph"), "graph", true,
-                        { xgr, gexf, graphml, gml, csv, dot, dotplain } };
+                        { graphml, gml, xgr, gexf, csv, dot, dotplain } };
     addDocument(graph);
 
     //CDocumentFormat txt = { tr("Plain text file"), "*.txt", { "txt" }, true, true };
@@ -244,7 +244,7 @@ QString qvgeMainWindow::getAboutText() const
 		+ QString(
 			"<p>This is a free software."
 			"<br>It comes without warranty of any kind. Use it on your own risk."
-			"<p>&copy; 2016-2021 Ars L. Masiuk"
+            "<p>&copy; 2023 Ray Lee"
 			"<hr>"
 			"<p><i>Credits:</i>"
 			"<br>&nbsp; - Qt framework &copy; <i>The Qt Company Ltd</i>"
@@ -252,9 +252,7 @@ QString qvgeMainWindow::getAboutText() const
 			"<br>&nbsp; - QSint widgets library &copy; <i>Sintegrial Technologies</i>"
             "<br>&nbsp; - QProcessInfo &copy; <i>Baldur Karlsson</i>"
 			"<br>&nbsp; - menu & toolbar graphics &copy; <i>Inkscape project</i>"
-#ifdef USE_OGDF
-            "<br>&nbsp; - OGDF &copy; <i>OGDF development team</i>"
-#endif
+            "<br>&nbsp; - qvge &copy; <i>Ars L. Masiuk</i>"
 		);
 }
 

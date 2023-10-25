@@ -58,7 +58,7 @@ CEditorScene::CEditorScene(QObject *parent):
     m_gridSize = 25;
     m_gridEnabled = true;
     m_gridSnap = true;
-    m_gridPen = QPen(Qt::gray, 0, Qt::DotLine);
+    m_gridPen = QPen(QColor("#cdcdcd"), 0, Qt::DotLine);
 
 	setBackgroundBrush(Qt::white);
 
@@ -1007,11 +1007,16 @@ void CEditorScene::pasteAt(const QPointF &anchor)
 			QString typeId = item->typeId();
 			if (ids[id + typeId] > 1)
 			{
-				int counter = 1;
+                int counter = 0;
 				QString newId = id;
 
-				while (ids.contains(newId + typeId))
-					newId = QString("Copy%1 of %2").arg(counter++).arg(id);
+                while (ids.contains(newId + typeId)) {
+                    // newId = QString("Copy%1 of %2").arg(counter++).arg(id);
+                    newId = item->createNewId();
+                    if (counter++ > 0) {
+                        newId = QString("%1%2").arg(newId).arg(counter++);
+                    }
+                }
 
 				item->setId(newId);
 			}
@@ -1140,12 +1145,16 @@ QList<CItem*> CEditorScene::cloneSelectedItems()
 			QString typeId = item->typeId();
 			if (ids[id + typeId] > 1)
 			{
-				int counter = 1;
+                int counter = 0;
 				QString newId = id;
 
-				while (ids.contains(newId + typeId))
-					newId = QString("Copy%1 of %2").arg(counter++).arg(id);
-
+                while (ids.contains(newId + typeId)) {
+                    // newId = QString("Copy%1 of %2").arg(counter++).arg(id);
+                    newId = item->createNewId();
+                    if (counter++ > 0) {
+                        newId = QString("%1%2").arg(newId).arg(counter++);
+                    }
+                }
 				item->setId(newId);
 			}
 		}

@@ -304,13 +304,13 @@ void CNodeEditorScene::initialize()
 
 
 	// default node attr
-    CAttribute nodeAttr("color", "Color", QColor(Qt::magenta), ATTR_FIXED);
+    CAttribute nodeAttr("color", "Color", QColor("#FFE6CC"), ATTR_FIXED);
 	setClassAttribute("node", nodeAttr);
 
-    CAttribute shapeAttr("shape", "Shape", "disc", ATTR_FIXED);
+    CAttribute shapeAttr("shape", "Shape", "roundedrect", ATTR_FIXED);
 	setClassAttribute("node", shapeAttr);
 
-	createClassAttribute("node", "size", "Size", QSizeF(11.0, 11.0), ATTR_MAPPED | ATTR_FIXED);
+    createClassAttribute("node", "size", "Size", QSizeF(150.0, 30.0), ATTR_MAPPED | ATTR_FIXED);
 	//createClassAttribute("node", "width", "Width", 11.0f, ATTR_MAPPED);
 	//createClassAttribute("node", "height", "Height", 11.0f, ATTR_MAPPED);
 
@@ -353,10 +353,20 @@ void CNodeEditorScene::initialize()
 
 	static CAttributeConstrainsList *nodeShapes = new CAttributeConstrainsList();
 	if (nodeShapes->ids.isEmpty()) {
-		nodeShapes->names << tr("Disc") << tr("Square") << tr("Triangle (up)") << tr("Triangle (down)") << tr("Diamond") << tr("Hexagon");
-		nodeShapes->ids << "disc" << "square" << "triangle" << "triangle2" << "diamond" << "hexagon";
-		nodeShapes->icons << QIcon(":/Icons/Node-Disc") << QIcon(":/Icons/Node-Square") << QIcon(":/Icons/Node-Triangle") 
-			<< QIcon(":/Icons/Node-Triangle-Down") << QIcon(":/Icons/Node-Diamond") << QIcon(":/Icons/Node-Hexagon");
+        nodeShapes->names << tr("Disc") << tr("Square") << tr("Triangle (up)") \
+                          << tr("Triangle (down)") << tr("Diamond") << tr("Hexagon") \
+                          << tr("RoundedRect") << tr("Note") << tr("Point") \
+                          << tr("Cylinder") << tr("Box3d");
+        nodeShapes->ids << "disc" << "square" << "triangle" \
+                        << "triangle2" << "diamond" << "hexagon" \
+                        << "roundedrect" << "note" << "point" \
+                        << "cylinder" << "box3d";
+        nodeShapes->icons << QIcon(":/Icons/Node-Disc") << QIcon(":/Icons/Node-Square") \
+                          << QIcon(":/Icons/Node-Triangle") << QIcon(":/Icons/Node-Triangle-Down") \
+                          << QIcon(":/Icons/Node-Diamond") << QIcon(":/Icons/Node-Hexagon") \
+                          << QIcon(":/Icons/Node-RoundedRect") << QIcon(":/Icons/Node-Note") \
+                          << QIcon(":/Icons/Node-Point") << QIcon(":/Icons/Node-Cylinder") \
+                          << QIcon(":/Icons/Node-Box3d");
 	}
 	setClassAttributeConstrains("node", "shape", nodeShapes);
 }

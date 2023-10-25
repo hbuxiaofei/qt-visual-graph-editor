@@ -3,6 +3,7 @@
 #include "CDirectEdge.h"
 #include "CEditorSceneDefines.h"
 
+#include <QDebug>
 #include <QPen>
 #include <QBrush>
 #include <QEvent>
@@ -846,6 +847,86 @@ QVariant CNode::itemChange(QGraphicsItem::GraphicsItemChange change, const QVari
 	return value;
 }
 
+void CNode::drawShape(QPainter *painter)
+{
+    // draw shape: no cache
+    if (m_shapeCache.isEmpty())
+    {
+        QByteArray shapeType = getAttribute("shape").toByteArray();
+        if (shapeType == "roundedrect") {
+            QRectF r = Shape::boundingRect();
+            painter->drawRoundedRect(r, 20, 20);
+        } else if (shapeType == "point") {
+            QRectF r = Shape::boundingRect();
+            painter->drawPoint(QPointF(r.center().x(), r.center().y()));
+        } else if ((shapeType == "cylinder")) {
+            QRectF r = Shape::boundingRect();
+            this->drawCylinder(painter, r);
+        } else if ((shapeType == "box3d")) {
+            QRectF r = Shape::boundingRect();
+            this->drawBox3d(painter, r);
+        } else {
+            QRectF r = Shape::boundingRect();
+            painter->drawEllipse(r);
+        }
+    } else {
+        painter->drawPolygon(m_shapeCache);
+    }
+}
+
+void CNode::drawCylinder(QPainter *painter, QRectF r)
+{
+    QRectF recTop(r.topLeft(),
+                  QPointF(r.center().x() + r.width() / 2.0, r.center().y() - r.height() / 8.0 * 2.0));
+    QRectF recBottom(QPointF(r.center().x() - r.width() / 2.0, r.center().y() + r.height() / 8.0 * 2.0),
+                     r.bottomRight());
+
+    QPainterPath path;
+    qreal xStart = r.center().x() + r.width() / 2.0;
+    qreal yStart = r.center().y() - r.height() / 8.0 * 3.0;
+
+    path.moveTo(xStart, yStart);
+    path.lineTo(QPointF(r.center().x() + r.width() / 2.0, r.center().y() + r.height() / 8.0 * 3.0));
+    path.arcTo(recBottom, 0, -180);
+    path.lineTo(r.center().x() - r.width() / 2.0, r.center().y() - r.height() / 8.0 * 3.0);
+    path.arcTo(recTop, 180, -180);
+    path.lineTo(xStart, yStart);
+
+    painter->drawPath(path);
+    painter->drawArc(recTop, 0 * 16, -180 * 16);
+}
+
+void CNode::drawBox3d(QPainter *painter, QRectF r)
+{
+    qreal x = r.center().x();
+    qreal y = r.center().y();
+    QPointF p1(x - r.width() / 8.0 * 3.0, y - r.height() / 2.0);
+    QPointF p2(x - r.width() / 2.0, y - r.height() / 8.0 * 3.0);
+    QPointF p3(x + r.width() / 2.0, y + r.height() / 8.0 * 3.0);
+    QPointF p4(x + r.width() / 8.0 * 3.0, y + r.height() / 2.0);
+    QPointF p0(p4.x(), p2.y());
+
+    QPainterPath path;
+
+    path.moveTo(p1);
+    path.lineTo(p2);
+    path.lineTo(r.bottomLeft());
+    path.lineTo(p4);
+    path.lineTo(p3);
+    path.lineTo(r.topRight());
+    path.lineTo(p1);
+
+    path.moveTo(p0);
+    path.lineTo(p2);
+
+    path.moveTo(p0);
+    path.lineTo(p4);
+
+    path.moveTo(p0);
+    path.lineTo(r.topRight());
+
+    painter->drawPath(path);
+}
 
 void CNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget*)
 {
@@ -874,16 +955,7 @@ void CNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 		painter->setPen(QPen(Qt::darkCyan, strokeSize+5, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin));
 		painter->setOpacity(0.3);
 
-		// draw shape: disc if no cache
-		if (m_shapeCache.isEmpty())
-		{
-			QRectF r = Shape::boundingRect();
-			painter->drawEllipse(r);
-		}
-		else
-		{
-			painter->drawPolygon(m_shapeCache);
-		}
+        this->drawShape(painter);
 	}
 	
 	// hover opacity
@@ -894,16 +966,7 @@ void CNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 
 	painter->setPen(QPen(strokeColor, strokeSize, (Qt::PenStyle)strokeStyle));
 
-	// draw shape: disc if no cache
-	if (m_shapeCache.isEmpty())
-	{
-		QRectF r = Shape::boundingRect();
-		painter->drawEllipse(r);
-	}
-	else
-	{
-		painter->drawPolygon(m_shapeCache);
-	}
+    this->drawShape(painter);
 }
 
 
@@ -932,7 +995,8 @@ void CNode::updateCachedItems()
 	recalculateShape();
 
 	// update caches & connections 
-	if (m_shapeCache != shapeCache || m_sizeCache != sizeCache)
+    // if (m_shapeCache != shapeCache || m_sizeCache != sizeCache)
+    if (m_ports.count() > 0)
 	{
 		// update ports & edges
 		updatePortsLayout();
@@ -1049,8 +1113,22 @@ void CNode::recalculateShape()
 	else if (shapeType == "triangle2")
 	{
 		m_shapeCache << r.topLeft() << r.topRight() << QPointF(r.bottomRight() + r.bottomLeft()) / 2 << r.topLeft();
-	}
-	else // "disc"
+    }
+    else if (shapeType == "note")
+    {
+        float rx = r.center().x();
+        float ry = r.center().y();
+        float ts = fminf(r.width(), r.height()) / 8;
+
+        m_shapeCache << r.topLeft() << r.bottomLeft() << r.bottomRight()
+                     << QPointF(rx + r.width() / 2, ry - r.height() / 2 + ts)
+                     << QPointF(r.left() + r.width() - ts, ry - r.height() / 2)
+                     << QPointF(r.left() + r.width() - ts, ry - r.height() / 2 + ts)
+                     << QPointF(rx + r.width() / 2, ry - r.height() / 2 + ts)
+                     << QPointF(r.left() + r.width() - ts, ry - r.height() / 2)
+                     << r.topLeft();
+    }
+    else // "disc", "roundedrect", "point", "cylinder", "box3d"
 	{
 		// no cache
 	}

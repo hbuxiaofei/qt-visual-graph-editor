@@ -44,6 +44,11 @@ CNodeEdgePropertiesUI::CNodeEdgePropertiesUI(QWidget *parent) :
     ui->NodeShape->addAction(QIcon(":/Icons/Node-Diamond"), tr("Diamond"), "diamond");
     ui->NodeShape->addAction(QIcon(":/Icons/Node-Triangle-Down"), tr("Triangle Down"), "triangle2");
 	ui->NodeShape->addAction(QIcon(":/Icons/Node-Hexagon"), tr("Hexagon"), "hexagon");
+    ui->NodeShape->addAction(QIcon(":/Icons/Node-RoundedRect"), tr("RoundedRect"), "roundedrect");
+    ui->NodeShape->addAction(QIcon(":/Icons/Node-Note"), tr("Note"), "note");
+    ui->NodeShape->addAction(QIcon(":/Icons/Node-Point"), tr("Point"), "point");
+    ui->NodeShape->addAction(QIcon(":/Icons/Node-Cylinder"), tr("Cylinder"), "cylinder");
+    ui->NodeShape->addAction(QIcon(":/Icons/Node-Box3d"), tr("Box3d"), "box3d");
 
     ui->NodeAttrBox->setChecked(false);
 

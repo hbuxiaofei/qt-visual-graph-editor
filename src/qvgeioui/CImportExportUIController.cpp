@@ -17,11 +17,6 @@ It can be used freely, maintaining the information above.
 #include <CImageExportDialog.h>
 #include <CCSVImportDialog.h>
 
-#ifdef USE_OGDF
-#include <qvgeui/ogdf/COGDFLayoutUIController.h>
-#include <qvgeui/ogdf/COGDFLayout.h>
-#endif
-
 #ifdef USE_GVGRAPH
 #include <qvgeui/gvgraph/CGVGraphLayoutUIController.h>
 #endif
@@ -259,12 +254,7 @@ bool CImportExportUIController::loadFromFile(const QString &format, const QStrin
 			return importCSV(scene, fileName, lastError);
 		}
 
-		// else via ogdf
-#ifdef USE_OGDF
-        return (COGDFLayout::loadGraph(fileName, scene, lastError));
-#else
 		return false;
-#endif
 	}
 	catch (...)
 	{

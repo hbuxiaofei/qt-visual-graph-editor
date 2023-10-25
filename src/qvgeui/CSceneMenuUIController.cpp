@@ -86,6 +86,9 @@ void CSceneMenuUIController::fillMenu(QMenu &menu, CEditorScene *scene, QGraphic
 	QAction *editPortAction = menu.addAction(tr("Edit Port..."), parent(), SLOT(editNodePort()));
 	editPortAction->setEnabled(dynamic_cast<CNodePort*>(triggerItem));
 
+    QAction *removePortAction = menu.addAction(tr("Remove Port"), parent(), SLOT(removeNodePort()));
+    removePortAction->setEnabled(dynamic_cast<CNodePort*>(triggerItem));
+
 	// add default edge actions
 	menu.addSeparator();
 
