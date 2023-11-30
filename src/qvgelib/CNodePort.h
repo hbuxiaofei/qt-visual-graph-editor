@@ -17,10 +17,10 @@ It can be used freely, maintaining the information above.
 class CNode;
 
 
-class CNodePort : public QGraphicsRectItem, public IInteractive
+class CNodePort : public QGraphicsEllipseItem, public IInteractive
 {
 public:
-	typedef QGraphicsRectItem Shape;
+    typedef QGraphicsEllipseItem Shape;
 
 	explicit CNodePort(CNode *node, const QByteArray& portId = QByteArray(), int align = 0, double xoff = 0, double yoff = 0);
 	virtual ~CNodePort();

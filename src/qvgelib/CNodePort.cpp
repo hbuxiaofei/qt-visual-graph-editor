@@ -18,8 +18,8 @@ CNodePort::CNodePort(CNode *node, const QByteArray& portId, int align, double xo
 {
  	Q_ASSERT(m_node != NULL);
 
-	setRect(-4, -4, 9, 9);
-	setBrush(Qt::gray);
+    setRect(-4, -4, 6, 6);
+    setBrush(Qt::black);
 	setPen(QPen(Qt::black, 1));
 
 	setToolTip(portId);
